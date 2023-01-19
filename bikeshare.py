@@ -28,7 +28,8 @@ def get_filters():
             continue
         else:
             break
-        #get user input for month (all, january, february, ... , june)
+    
+    #get user input for month (all, january, february, ... , june)
         
     while True:
         month = input ("Please input the month that you would like to filter by, ortype 'all' to apply no month filter: ").lower()
@@ -147,7 +148,6 @@ def trip_duration_stats(df):
     print("Total travel time :", total_travel)
 
     # display mean travel time
-    # display mean travel time
     mean_travel = df['Trip Duration'].mean()
     print("Mean travel time :", mean_travel)
     
@@ -158,7 +158,7 @@ def trip_duration_stats(df):
 
 
 def user_stats(df):
-    """Displays statistics on bikeshare users."""
+    "Displays statistics on bikeshare users."
 
     print('\nCalculating User Stats...\n')
     start_time = time.time()
