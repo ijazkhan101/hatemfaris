@@ -1,6 +1,8 @@
 import time
 import pandas as pd
 import numpy as np
+import datetime 
+
 
 CITY_DATA = { 'chicago': 'chicago.csv',
               'new york city': 'new_york_city.csv',
@@ -15,66 +17,72 @@ DAYS = ['sunday', 'monday', 'tuesday', 'wednesday',
         'thursday', 'friday', 'saturday' ]
 
 def get_filters():
-    """
-    Asks user to specify a city, month, and day to analyze.
-    Returns:
-        (str) city - name of the city to analyze
-        (str) month - name of the month to filter by, or "all" to apply no month filter
-        (str) day - name of the day of week to filter by, or "all" to apply no day filter
-    """
 
     print('\nHello! Let\'s explore some US bikeshare data!')
     # TO DO: get user input for city (chicago, new york city, washington). HINT: Use a while loop to handle invalid inputs
 
     while True:
-        city = input ("Please input the name of the city that you would like toanalyze: ").lower()
-    
-        # get user input for month (all, january, february, ... , june)
+        city = input ("Please input the name of the city that you would like to analyze: ").lower()
+        if city not in CITIES:
+            print("Sorry, I didn't catch the City. Try again.")
+            continue
+        else:
+            break
+        #get user input for month (all, january, february, ... , june)
+        
+    while True:
         month = input ("Please input the month that you would like to filter by, ortype 'all' to apply no month filter: ").lower()
-    
-        # get user input for day of week (all, monday, tuesday, ... sunday)
+        if month not in MONTHS:
+            print("Sorry, I didn't catch the month. Try again.")
+            continue
+        else:
+         break
+   
+    # get user input for day of week (all, monday, tuesday, ... sunday)
+    while True:
         day = input ("Please input the day of the week that you would like to filterby, or type 'all' to apply no day filter: ").lower()
-        break
+        if day not in DAYS:
+            print("Sorry, I didn't catch the day . Try again.")
+            continue
+        else:
+            break
+        
     print('-'*40)
     return city, month, day
 
-def load_data(city, month, day):
-    cities =CITY_DATA['ci']
-    
-    
-    """
-    Loads data for the specified city and filters by month and day if applicable.
 
-    Args:
-        (str) city - name of the city to analyze
-        (str) month - name of the month to filter by, or "all" to apply no month filter
-        (str) day - name of the day of week to filter by, or "all" to apply no day filter
-    Returns:
-        df - Pandas DataFrame containing city data filtered by month and day
-    """
+
+def load_data(city, month, day):
     # load data file into a dataframe
     df = pd.read_csv(CITY_DATA[city])
-    
-    # extract month and day of week and hour from Start Time to create new columns
+
+    # convert the Start Time column to datetime
+    df['Start Time'] = pd.to_datetime(df['Start Time'])
+
+    # extract month and day of week from Start Time to create new columns
     df['month'] = df['Start Time'].dt.month
-    df['day_of_week'] = df['Start Time'].dt.weekday_name
+
+    df['day_of_week'] = df['Start Time'].dt.day_name()
+    
+    # extract hour from the Start Time column to create an hour column
     df['hour'] = df['Start Time'].dt.hour
 
+    
     # filter by month if applicable
     if month != 'all':
-        month =  MONTHS.index(month) + 1
-        df = df[ df['month'] == month ]
+        # use the index of the months list to get the corresponding int
+        months = ['january', 'february', 'march', 'april', 'may', 'june']
+        month = months.index(month) + 1
+
+        # filter by month to create the new dataframe
+        df = df[df['month'] == month]
 
     # filter by day of week if applicable
     if day != 'all':
         # filter by day of week to create the new dataframe
-        df = df[ df['day_of_week'] == day.title()]
-        
-        
-
+        df = df[df['day_of_week'] == day.title()]
 
     return df
-
 
 def time_stats(df):
     """Displays statistics on the most frequent times of travel."""
