@@ -5,11 +5,11 @@ import datetime
 
 
 CITY_DATA = { 'chicago': 'chicago.csv',
-              'newyork': 'new_york_city.csv',
+              'new york city': 'new_york_city.csv',
               'washington': 'washington.csv' }
 
 
-CITIES = ['chicago', 'newyork', 'washington']
+CITIES = ['chicago', 'new york city', 'washington']
 
 MONTHS = ['january', 'february', 'march', 'april', 'may', 'june']
 
@@ -168,23 +168,31 @@ def user_stats(df):
     user_counts = df['User Type'].value_counts()
 
     # Display counts of gender
-    print("Counts of Gender:\n")
-    user_counts = df['Gender'].value_counts()
+    try:
+        gender_types = df['Gender'].value_counts()
+        print('Gender Types:', gender_types)
+    except KeyError:
+            print("Sorry no data available for this month.") 
 
+  
     # Display earliest, most recent, and most common year of birth
-    birth_year = df['Birth Year']
-    
-    #earliest year of birth
-    earliest_year = birth_year.min()
-    print("The most earliest birth year:", earliest_year)
-    
-    #most recent year of birth
-    most_recent = birth_year.max()
-    print("The most recent birth year:", most_recent)
-    
-    #most common year of birth
-    most_common_year = birth_year.value_counts().idxmax()
-    print("The most common birth year:", most_common_year)
+    try:
+      Earliest_Year = df['Birth Year'].min()
+      print('Most earliest year:', Earliest_Year)
+    except KeyError:
+      print("Sorry, no data available.")
+
+    try:
+      Most_Recent_Year = df['Birth Year'].max()
+      print('Most Recent Year:', Most_Recent_Year)
+    except KeyError:
+      print("Sorry, no data available.")
+
+    try:
+      Most_Common_Year = df['Birth Year'].value_counts().idxmax()
+      print('Most Common Year:', Most_Common_Year)
+    except KeyError:
+      print("Sorry, no data available.")
     
     
     print("\nThis took %s seconds." % (time.time() - start_time))
